@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: LimitRange
+metadata:
+  name: range1
+  namespace: default
+spec:
+  limits:
+    - default:
+        memory: 512Mi
+        cpu: 1
+      defaultRequest:
+        memory: 256Mi
+        cpu: 1
+      min:
+        cpu: "200m"
+      max:
+        cpu: "800m"
+      type: Container
+
+
+
+
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: storageLimit
+  namespace: default
+spec:
+  limits:
+    - min:
+        storage: "200m"
+      max:
+        storage: "800m"
+      type: PersistentVolumeClaim

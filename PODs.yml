@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: POD
+metadata:
+  name: test
+  namespace: work
+  labels:
+    app: test
+  annottations:
+    buildversion: 1.2.2
+spec:
+  serviceAccountName: ingress-serviceAccount
+  automountServiceAccountToken: false
+  securityContext:
+    runAsUser: developer
+  containers:
+    - securityContext:
+        capabilities:
+          add: ["MAC_ADMIN"]
+          remove: [""]
+      name: containerName
+      image: nginx
+      imagePullPolicy: IfNotPresent
+      command:
+      - "/bin/sh"
+      - "-c"
+      - "while true; do date; sleep $TIME_FREQ;done > /opt/time/time-check.log"  
+      ports:
+        - containerPort: 8080
+      VolumeMounts:
+        - mountPath: /lib
+          name: volumeName
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: 1
+        limit:
+          memory: 1Gi
+          cpu: 1
+      env:
+        - name:
+          value:
+      envFrom:
+        - configMapKeyRef:
+            name: configMapName
+            key: keyname
+      envFrom:
+        - secretRef:
+            name: SecretName
+      readinessProbe:
+        httpGet:
+          path: /api/index.php
+          port: 80
+        tcpSocket:
+          port: 8080
+        exec:
+          command:
+            - "asdasd"
+        intialDelaySeconds: 10
+        periodSeconds: 10
+        failureThreshold: 8
+      livenessProbe:
+        exec:
+          command:
+            - "asdasd"
+  volumes:
+    - name: volumeName
+      emptyDir: {}
+      hostPath:
+        path: /lib
+        type: Directory
+  volumes:
+  - name: config
+    configMap:
+          name: redis-config
+  volumes:
+  - name: mypd
+    persistentVolumeClaim:
+      claimName: myclaim
+  volumes:
+  - name: foo
+    secret:
+      secretName: mysecret
+  tolerations:
+    - key: keyname
+      operator: Equal/Exists/In/NotIn
+      value: value
+      effect: NoSchedule/NoExecute/PrefNoSchedule
+      tolerationSeconds: 6000
+  nodeSelector:
+    env: prod
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: keyname
+                operator: Exists/In/NotIn
+                values:
+                  - value
+      preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: disktype
+                  operator: In
+                  values:
+                  - ssd   

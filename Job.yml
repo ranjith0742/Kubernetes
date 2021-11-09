@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+	name: job
+spec:
+	parallelism: 3
+	completions: 2
+	backoffLimit: 6
+	template:
+		metadata:
+			labels:
+				apps: asd
+		spec:
+			containers:
+				- name: test
+				  image: nginx
+				  - command:
+						- sh 
+						- -c
+						- "cowsay I am going to ace CKAD!"
+			restartPolicy: Never

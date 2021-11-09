@@ -1,0 +1,14 @@
+apiVersion: v2
+name: Wordpress
+version: 9.0.3
+description: Wordpress description
+keywords:
+  - Wordpress
+  - cms
+  - blog
+home: http://www.wordpress.com/
+sources:
+  - https://github.com/bitnami/bitnami-docker-wordpress
+maintainers:
+  - email: contaienrs@bitnami.com
+    name: bitnami

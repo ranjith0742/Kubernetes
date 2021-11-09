@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: ConfigMap
+metadata:
+  name: configMapName
+data:
+  DB_HOST: server
+  DB_User: user
+  DB_Password: password

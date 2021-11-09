@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpolname
+spec:
+  policyTypes:
+    - Ingress
+  podSelector:
+    matchLabels:
+      label: val
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              name: api-prod
+        - namespaceSelector:
+            matchLabels:
+              name: prod
+        - ipBlock:
+            cidr: 192.168.5.10/32
+      ports:
+        - port: 80
+          protocol: TCP
+  egress:
+    - to:
+        - podSelector:
+            matchLabels: api-prod
+      ports:
+        - port: 8080
+          protocol: TCP

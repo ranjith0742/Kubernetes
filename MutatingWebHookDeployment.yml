@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2021-11-03T15:42:13Z"
+  generation: 1
+  labels:
+    app: webhook-server
+  name: webhook-server
+  namespace: webhook-demo
+  resourceVersion: "1114"
+  uid: d56ba1da-e982-4651-97dc-a8c41063e040
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: webhook-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webhook-server
+    spec:
+      containers:
+        - image: stackrox/admission-controller-webhook-demo:latest
+          imagePullPolicy: Always
+          name: server
+          ports:
+            - containerPort: 8443
+              name: webhook-api
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /run/secrets/tls
+              name: webhook-tls-certs
+              readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1234
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: webhook-tls-certs
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-tls
+status:
+  availableReplicas: 1
+  conditions:
+    - lastTransitionTime: "2021-11-03T15:42:19Z"
+      lastUpdateTime: "2021-11-03T15:42:19Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2021-11-03T15:42:13Z"
+      lastUpdateTime: "2021-11-03T15:42:19Z"
+      message: ReplicaSet "webhook-server-7c8b68dccc" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

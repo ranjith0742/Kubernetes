@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+	name: taintsandtolerationa
+spec: 
+	containers: 
+		- name: nginx-containers
+		  image: nginx
+	
+	tolerations:
+		- key: "app"
+		  operator: "Equal"
+		  value: "blue"
+		  effenct: "NoSchedule"
+          
+          
+kubectl taint nodes node-name key=value:taint-effect
+
+    taint-effect 3 typs:
+        NoSchedule, PreferNoSchedule, NoExecute
+        
+ Ex: kubectl taint nodes node1 app=blue:NoSchedule

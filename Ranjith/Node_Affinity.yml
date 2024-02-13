@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+	name: taintsandtolerationa
+spec: 
+	containers: 
+		- name: nginx-containers
+		  image: nginx
+	
+	affinity:
+        nodeaffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: size
+                          operator: In
+                          values:
+                            - Large
+                            - Medium
+
+apiVersion: v1
+kind: Pod
+metadata: 
+	name: taintsandtolerationa
+spec: 
+	containers: 
+		- name: nginx-containers
+		  image: nginx
+	
+	affinity:
+        nodeaffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: size
+                          operator: NotIn
+                          values:
+                            - Small                            
+  
+          
+kubectl label nodes node-name labe-key=label-value
+
+    node affinity 3 typs:
+        requiredDuringSchedulingIgnoredDuringExecution
+        preferredDuringSchedulingIgnoredDuringExecution
+        requiredDuringSchedulingrequiredDuringExecution
+        
+ Ex: kubectl label nodes node1 size=Large
+ 
+ 
+    To Ensure PODS are nodes are hosted in a particular Nodes

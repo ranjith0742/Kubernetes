@@ -1,0 +1,47 @@
+1. Readiness Probe (To check whether the Application is ready)
+
+readinessProbe:
+	httpGet:
+		path: /api/product/get
+		port: 8080
+		
+	tcpSocket:
+		port:3306
+		
+	exec:
+		command:
+			- cat
+			- /app/is_ready
+			
+	initialDelaySeconds: 10			
+	periodSeconds: 5				(retry interval)
+	failureTreshold: 8				(retry times)
+	
+	
+2. Liveness Probe	(To check whether the Application is fine in regular time interval)
+
+livenessProbe:
+	httpGet:
+		path: /api/product/get
+		port: 8080
+		
+	tcpSocket:
+		port:3306
+		
+	exec:
+		command:
+			- cat
+			- /app/is_ready
+			
+	initialDelaySeconds: 10			
+	periodSeconds: 5				(retry interval)
+	failureTreshold: 8				(retry times)
+	
+
+3. Container Logs
+
+	kubectl logs -f podname containername
+	
+4. Labels, Selectors and Annotations
+
+	kubectl get pods --selector key=value			(To get pods based on labels)
